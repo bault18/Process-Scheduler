@@ -16,7 +16,7 @@ namespace ProcessScheduler
         static public List<Process> getProcesses(string fileName)
         {
             List<Process> processes = new List <Process> ();
-            string filePath = Directory.GetCurrentDirectory() + "\\" + fileName;
+            string filePath = Directory.GetCurrentDirectory() + "\\" + fileName; 
 
             StreamReader file = new StreamReader(filePath);
             string line;
