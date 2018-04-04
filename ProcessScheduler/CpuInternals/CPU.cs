@@ -9,17 +9,17 @@ namespace ProcessScheduler
     class CPU
     {
         #region Member Variables
-        private static int contextSwitchTime = 1;
-        private int numContextSwitch;
         private List<Process> processes;
 
         public Dispatcher dispatcher;
         #endregion
 
-        public CPU()
+        public CPU(List<Process> procs)
         {
+            processes = procs;
             Dispatcher dispatcher = new Fcfs(processes);
 
+            dispatcher.run();
         }
     }
 }

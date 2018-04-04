@@ -51,6 +51,8 @@ namespace ProcessScheduler
             //Bring in process input files
             List<Process> processes = getProcesses("CreatedProcs.txt");
 
+            CPU processor = new CPU(processes);
+            Console.WriteLine("Done");
 
 
         }

@@ -17,7 +17,7 @@ namespace ProcessScheduler
         public int blockExitTime; //Time process exits block queue
 
 
-        public int schedulingTime;  //Total time spend in process scheduler
+        public int schedulingTime;  //Total time spend in process scheduler TODO: do we need this? this is just = Completed - Arrival
         public int blockedTime;     //Time blocked by I/O
         public int completedTime;   //Time of process completion
         public int totalProcessingTime;
@@ -26,13 +26,20 @@ namespace ProcessScheduler
         #endregion
 
         #region Constructors
-        public Process(int ID, int arriveTime)
+        public Process(int ID, int arriveTime, List<int> events)
         {
             pid = ID;
             ArrivalTime = arriveTime;
             schedulingTime = 0;
             blockedTime = 0;
             responseTime = -1;
+            RemainingEvents = new Queue<int>();
+            CompletedEvents = new List<int>();
+
+            foreach(int evnt in events) //Create event queue
+            {
+                RemainingEvents.Enqueue(evnt);
+            }
         }
         #endregion
 

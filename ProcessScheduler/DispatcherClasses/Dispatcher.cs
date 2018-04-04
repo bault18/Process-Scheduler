@@ -10,8 +10,7 @@ namespace ProcessScheduler
     {
         public Queue<Process> arrivalQueue;    //Holds list of all processes created
         public List<Process> completedProcesses;
-        List<Process> blockedQueue; //Holds list of all processes blocked by I/O
-
+        public List<Process> blockedQueue; //Holds list of all processes blocked by I/O
 
         public Process currProcess; //current process being executed by CPU
 
@@ -25,20 +24,7 @@ namespace ProcessScheduler
             contextSwtichTime = 2;
             blockedQueue = new List<Process>();
             completedProcesses = new List<Process>();
-
-
-        }
-
-        //Check each blocked process's exit time against the current CPU time
-        //If the exit time is <= the CPU time, return the process to the processing queue
-        public void checkBlockedQueue() {
-            foreach (Process process in blockedQueue)
-            {
-                if(process.blockExitTime <= CPUTime)
-                {
-                    //Add back to proccessing queue
-                }
-            }
+            arrivalQueue = new Queue<Process>();
         }
 
         public void blockProcess(Process process) {            
@@ -62,5 +48,18 @@ namespace ProcessScheduler
             CPUTime += contextSwtichTime;
             numContextSwitch++;
         }
+
+        public void run()
+        {
+            while (completedProcesses.Count() < 999) //TODO: Fix this static number
+            {
+                addNewProcess();
+                swapProcesses();
+            }
+        }
+
+        public abstract void addNewProcess();
+        public abstract void swapProcesses();
+        public abstract void checkBlockedQueue();
     }
 }
