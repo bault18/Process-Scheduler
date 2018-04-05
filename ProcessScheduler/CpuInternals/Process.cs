@@ -15,6 +15,7 @@ namespace ProcessScheduler
         private List<int> CompletedEvents; //TODO: determine if needs to be public member
         private Queue<int> RemainingEvents;
         public int blockExitTime; //Time process exits block queue
+        public int priority; //Linux style priority. The lower the value, the higher the priority
 
 
         public int schedulingTime;  //Total time spend in process scheduler TODO: do we need this? this is just = Completed - Arrival
