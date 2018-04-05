@@ -35,17 +35,20 @@ namespace ProcessScheduler.DispatcherClasses
                 if (currProcess.responseTime < 0)
                     currProcess.responseTime = CPUTime;
 
-                int burstTime = currProcess.remainingEvents.Dequeue();  //Get current CPU burst time
+                int burstTime = currProcess.remainingEvents.First.Value;  //Get current CPU burst time
+
 
                 if (burstTime > quantumTime)
                 {
                     burstTime -= quantumTime;
+                    currProcess.remainingEvents.First.Value = burstTime;
                     CPUTime += quantumTime;
                     currProcess.totalProcessingTime += quantumTime;
                     scheduleQueue.Enqueue(currProcess); 
                 }
                 else
                 {
+                    currProcess.remainingEvents.RemoveFirst(); 
                     CPUTime += burstTime;
                     currProcess.totalProcessingTime += burstTime;
                     if (currProcess.remainingEvents.Count() > 0)
