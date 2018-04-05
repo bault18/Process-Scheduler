@@ -27,9 +27,10 @@ namespace ProcessScheduler
             arrivalQueue = new Queue<Process>();
         }
 
-        public void blockProcess(Process process) {            
+        public void blockProcess(Process process) {
             //set exit time
-            int IOBurst = process.remainingEvents.Dequeue();
+            int IOBurst = process.remainingEvents.First.Value;
+            process.remainingEvents.RemoveFirst();
             process.blockExitTime = IOBurst + CPUTime;
 
             //remove I/O event, place in comleted event

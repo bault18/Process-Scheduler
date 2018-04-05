@@ -71,7 +71,8 @@ namespace ProcessScheduler
                 if (currProcess.responseTime < 0)
                     currProcess.responseTime = CPUTime;
 
-                int burstTime = currProcess.remainingEvents.Dequeue();  //Get current CPU burst time
+                int burstTime = currProcess.remainingEvents.First.Value;  //Get current CPU burst time
+                currProcess.remainingEvents.RemoveFirst(); //And remove the first node from the queue
 
                 removeCoreProc(nextOpenCore);
                 addCoreProc(nextOpenCore, burstTime);
