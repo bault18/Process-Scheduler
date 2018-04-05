@@ -53,7 +53,8 @@ namespace ProcessScheduler
                 if (currProcess.responseTime < 0)
                     currProcess.responseTime = CPUTime;
 
-                int burstTime = currProcess.remainingEvents.Dequeue();  //Get current CPU burst time
+                int burstTime = currProcess.remainingEvents.First.Value;  //Get current CPU burst time
+                currProcess.remainingEvents.RemoveFirst();
 
                 //Update CPU clock, update data collection
                 CPUTime += burstTime;

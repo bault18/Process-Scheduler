@@ -20,6 +20,10 @@ namespace ProcessScheduler
             Dispatcher dispatcher = new Fcfs(processes);
 
             dispatcher.run();
+
+            Dispatcher LoadShare = new LoadSharing(processes);
+            LoadShare.run();
+            Console.WriteLine("Done");
         }
     }
 }

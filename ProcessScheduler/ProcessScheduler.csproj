@@ -48,6 +48,7 @@
     <Compile Include="DispatcherClasses\Fcfs.cs" />
     <Compile Include="CpuInternals\Process.cs" />
     <Compile Include="DispatcherClasses\Roundrobin.cs" />
+    <Compile Include="DispatcherClasses\LoadSharing.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

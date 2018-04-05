@@ -13,8 +13,9 @@ namespace ProcessScheduler
         private int pid;
         private int ArrivalTime;
         private List<int> CompletedEvents; //TODO: determine if needs to be public member
-        private Queue<int> RemainingEvents;
+        private LinkedList<int> RemainingEvents;
         public int blockExitTime; //Time process exits block queue
+        public int priority; //Linux style priority. The lower the value, the higher the priority
 
 
         public int schedulingTime;  //Total time spend in process scheduler TODO: do we need this? this is just = Completed - Arrival
@@ -33,12 +34,12 @@ namespace ProcessScheduler
             schedulingTime = 0;
             blockedTime = 0;
             responseTime = -1;
-            RemainingEvents = new Queue<int>();
+            RemainingEvents = new LinkedList<int>();
             CompletedEvents = new List<int>();
 
             foreach(int evnt in events) //Create event queue
             {
-                RemainingEvents.Enqueue(evnt);
+                RemainingEvents.AddLast(evnt);
             }
         }
         #endregion
@@ -58,7 +59,7 @@ namespace ProcessScheduler
             set { CompletedEvents = value; }
         }
 
-        public Queue<int> remainingEvents
+        public LinkedList<int> remainingEvents
         {
             get { return RemainingEvents; }
             set { RemainingEvents = value; }
