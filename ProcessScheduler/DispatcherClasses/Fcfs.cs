@@ -20,7 +20,7 @@ namespace ProcessScheduler
             foreach (Process proc in processes)
                 arrivalQueue.Enqueue(proc);
 
-            arrivalQueue.OrderBy<Process, int>(p => p.arrivalTime);
+            arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
         }
         #endregion
 

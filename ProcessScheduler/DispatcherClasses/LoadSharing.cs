@@ -11,39 +11,42 @@ namespace ProcessScheduler
         #region Member Variables
         private Queue<Process> scheduleQueue;
 
-        List<Proccessor> cores;
+        private List<Proccessor> cores;
 
+        private static int numCores;
+        
+        private int nextOpenCoreTime;
         private int nextOpenCore;
         #endregion
 
         #region Constructor
         public LoadSharing(List<Process> processes)
         {
+            numCores = 5;
             scheduleQueue = new Queue<Process>();
             cores = new List<Proccessor>();
 
-            for(int core = 0; core < 4; core++)
+
+            for(int core = 0; core < numCores; core++)
             {
                 Proccessor newCore = new Proccessor();
                 newCore.endTime = -1;
                 newCore.CoreID = core;
+                newCore.free = true;
 
                 cores.Add(newCore);
             }
-
+            
+            nextOpenCoreTime = 0;
             nextOpenCore = 0;
 
             foreach (Process proc in processes)
                 arrivalQueue.Enqueue(proc);
 
-            arrivalQueue.OrderBy<Process, int>(p => p.arrivalTime);
+            arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
         }
 
         #endregion
-
-
-
-
 
         public override void addNewProcess()
         {
@@ -63,25 +66,24 @@ namespace ProcessScheduler
 
         public override void swapProcesses()
         {
-            if (scheduleQueue.Count > 0)
+            if (scheduleQueue.Count > 0 || nextOpenCoreTime <= CPUTime) //Need to 'OR' to utilize all cores at start of scheduling
             {
-                currProcess = scheduleQueue.Dequeue();
+                for(int core = 0; core < numCores; core++)
+                {
+                    //If proc completed & core hasn't been released
+                    if (cores[core].endTime <= CPUTime && !cores[core].free)
+                        releaseCore(core);
+                    
+                    //If core free, add proc
+                    if (cores[core].free && scheduleQueue.Count > 0)
+                        addCoreProc(core);
+                }
 
-                //Set response time
-                if (currProcess.responseTime < 0)
-                    currProcess.responseTime = CPUTime;
-
-                int burstTime = currProcess.remainingEvents.First.Value;  //Get current CPU burst time
-                currProcess.remainingEvents.RemoveFirst(); //And remove the first node from the queue
-
-                removeCoreProc(nextOpenCore);
-                addCoreProc(nextOpenCore, burstTime);
                 findNextOpenCore();
-
                 checkBlockedQueue();
             }
-            else
-                CPUTime++;
+
+            updateClock();
         }
 
         public override void checkBlockedQueue()
@@ -97,40 +99,89 @@ namespace ProcessScheduler
             }
         }
 
-        public void removeCoreProc(int core)
+        public void releaseCore(int core)
         {
             //check for IO as we remove process
             Proccessor currCore = cores[core];
-            if(currCore.currProc.remainingEvents.Count() > 0)
+            if (currCore.currProc != null)  //Issue where first proc added causes error to occur
             {
-                blockProcess(currCore.currProc);
-            }
-            else
-            {
-                currCore.currProc.completedTime = CPUTime;
-                completedProcesses.Add(currCore.currProc);
+                if (currCore.currProc.remainingEvents.Count() > 0)
+                {
+                    blockProcess(currCore.currProc);
+                }
+                else
+                {
+                    currCore.currProc.completedTime = CPUTime;
+                    completedProcesses.Add(currCore.currProc);
+                }
+                contextSwitch();
             }
 
-            contextSwitch();
+            currCore.free = true;
+
+            cores[core] = currCore;
         }
 
-        public void addCoreProc(int core, int burstTime)
+        public void addCoreProc(int core)
         {
+            //Get process
+            currProcess = scheduleQueue.Dequeue();
+
+            //Update process statistics
+            if (currProcess.responseTime < 0)
+                currProcess.responseTime = CPUTime;
+
+            //Add process to core
             Proccessor currCore = cores[core];
-            currCore.endTime= CPUTime + burstTime;
+            currCore.currProc = currProcess;
+
+            //Setup end time for CPU
+            int burstTime = currProcess.remainingEvents.First.Value;
+            currProcess.remainingEvents.RemoveFirst(); //And remove the first node from the queue
+
+            currCore.endTime = CPUTime + burstTime;
             currCore.currProc.totalProcessingTime += burstTime;
 
+            //Assign process
             currCore.currProc = currProcess;
+            currCore.free = false;
+
+            //Update core list with new core values
+            cores[core] = currCore;
         }
 
+
+        
         public void findNextOpenCore()
         {
-            foreach(Proccessor core in cores)
+            foreach (Proccessor core in cores)
             {
                 if (core.endTime < cores[nextOpenCore].endTime)
+                {
+                    nextOpenCoreTime = core.endTime;
                     nextOpenCore = core.CoreID;
+                }
             }
         }
+
+        public void updateClock()
+        {
+            bool allUtilized = true;
+            foreach(Proccessor core in cores)
+            {
+                if(core.free)
+                {
+                    allUtilized = false;
+                    break;
+                }
+            }
+
+            if (allUtilized)
+                CPUTime = nextOpenCoreTime;
+            else
+                CPUTime++;
+        }
+
     }
     
 
@@ -138,7 +189,9 @@ namespace ProcessScheduler
     public struct Proccessor
     {
         public Process currProc;
+        public int time;
         public int endTime;
         public int CoreID;
+        public bool free;
     }
 }

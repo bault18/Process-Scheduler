@@ -10,8 +10,6 @@ namespace ProcessScheduler
     {
         #region Member Variables
         private List<Process> processes;
-
-        public Dispatcher dispatcher;
         #endregion
 
         public CPU(List<Process> procs)

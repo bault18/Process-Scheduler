@@ -51,7 +51,8 @@ namespace ProcessScheduler
             //Bring in process input files
             List<Process> processes = getProcesses("CreatedProcs.txt");
 
-            CPU processor = new CPU(processes);
+            Dispatcher LS = new LoadSharing(processes);
+            LS.run();
             Console.WriteLine("Done");
 
 
