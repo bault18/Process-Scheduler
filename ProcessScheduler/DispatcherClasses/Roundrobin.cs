@@ -9,7 +9,9 @@ namespace ProcessScheduler.DispatcherClasses
     class Roundrobin : Dispatcher
     {
         int quantumTime = 5; 
-        Queue<Process> scheduleQueue;
+		
+        public Queue<Process> scheduleQueue;
+
         public override void addNewProcess()
         {
             while (arrivalQueue.Count > 0) //Do not run if no procs to queue
@@ -25,6 +27,11 @@ namespace ProcessScheduler.DispatcherClasses
                     break;
             }
         }
+
+		public void AddProcess(Process process) {
+			scheduleQueue.Enqueue(process);
+		}
+
         public override void swapProcesses()
         {
             if (scheduleQueue.Count > 0)
@@ -63,8 +70,6 @@ namespace ProcessScheduler.DispatcherClasses
 
 
                 }
-               
-             
                 contextSwitch();
                 checkBlockedQueue();
             }
@@ -72,8 +77,6 @@ namespace ProcessScheduler.DispatcherClasses
             {
                 CPUTime++;
             }
-
-
         }
         public override void checkBlockedQueue()
         {
@@ -86,11 +89,13 @@ namespace ProcessScheduler.DispatcherClasses
                     proc--;                                     //Prevent memory access errors
                 }
             }
-
         }
 
-        
-    }
+		public int Count()
+		{
+			return scheduleQueue.Count;
+		}
+	}
 }
 
 

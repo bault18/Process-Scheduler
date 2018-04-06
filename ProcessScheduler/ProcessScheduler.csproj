@@ -47,6 +47,7 @@
     <Compile Include="DispatcherClasses\Dispatcher.cs" />
     <Compile Include="DispatcherClasses\Fcfs.cs" />
     <Compile Include="CpuInternals\Process.cs" />
+    <Compile Include="DispatcherClasses\MultiLevelFeedback.cs" />
     <Compile Include="DispatcherClasses\Roundrobin.cs" />
     <Compile Include="DispatcherClasses\LoadSharing.cs" />
     <Compile Include="Program.cs" />
