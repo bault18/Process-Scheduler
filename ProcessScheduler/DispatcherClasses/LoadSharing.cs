@@ -17,12 +17,13 @@ namespace ProcessScheduler
         
         private int nextOpenCoreTime;
         private int nextOpenCore;
+        private int numCoresUsed;
         #endregion
 
         #region Constructor
         public LoadSharing(List<Process> processes)
         {
-            numCores = 5;
+            numCores = 4;
             scheduleQueue = new Queue<Process>();
             cores = new List<Proccessor>();
 
@@ -82,7 +83,7 @@ namespace ProcessScheduler
                 findNextOpenCore();
                 checkBlockedQueue();
             }
-
+            numCoresUse();
             updateClock();
         }
 
@@ -138,6 +139,7 @@ namespace ProcessScheduler
             //Setup end time for CPU
             int burstTime = currProcess.remainingEvents.First.Value;
             currProcess.remainingEvents.RemoveFirst(); //And remove the first node from the queue
+            currProcess.completedEvents.Add(burstTime);
 
             currCore.endTime = CPUTime + burstTime;
             currCore.currProc.totalProcessingTime += burstTime;
@@ -148,6 +150,9 @@ namespace ProcessScheduler
 
             //Update core list with new core values
             cores[core] = currCore;
+
+            if (core == nextOpenCore)
+                nextOpenCoreTime = currCore.endTime;
         }
 
 
@@ -182,6 +187,17 @@ namespace ProcessScheduler
                 CPUTime++;
         }
 
+        public void numCoresUse()           //TODO: Remove
+        {
+            int num = 0;
+            foreach(Proccessor core in cores)
+            {
+                if (!core.free)
+                    num++;
+            }
+            numCoresUsed = num;
+        }
+
     }
     
 
@@ -189,7 +205,6 @@ namespace ProcessScheduler
     public struct Proccessor
     {
         public Process currProc;
-        public int time;
         public int endTime;
         public int CoreID;
         public bool free;
