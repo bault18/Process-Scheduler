@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Microsoft.Office.Core;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ProcessScheduler
 {
@@ -48,14 +50,77 @@ namespace ProcessScheduler
 
         static void Main(string[] args)
         {
-            //Bring in process input files
-            List<Process> processes = getProcesses("CreatedProcs.txt");
+            //Create Excel Doc
+            var excelApp = new Excel.Application();
+            excelApp.Visible = true;
+            excelApp.Workbooks.Add();
 
-            Dispatcher LS = new LoadSharing(processes);
-            LS.run();
-            Console.WriteLine("Done");
+            for(int x = 1; x < 10; x++)
+            {
+                //Bring in process input files
+                List<Process> processes = getProcesses("\\1_BaseDataSet\\set" + x.ToString() + ".txt");
+
+                Dispatcher LS = new Fcfs(processes);
+                LS.run();
+                Console.WriteLine("Run" + x.ToString() + " complete");
 
 
+
+                Excel._Worksheet workSheet;
+                if (x != 1) //Add new worksheets
+                {
+                    excelApp.Worksheets.Add();
+                    workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
+                }
+                else //Create first worksheet
+                    workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
+
+                //Add values to sheet
+                workSheet.Cells[1, "A"] = "PID";
+                workSheet.Cells[1, "B"] = "Arrival Time";
+                workSheet.Cells[1, "C"] = "Response Time (Raw)";
+                workSheet.Cells[1, "D"] = "Completion Time";
+
+                workSheet.Cells[1, "F"] = "Turnaround Time";
+                for (int i = 0; i < processes.Count(); i++)
+                {
+                    workSheet.Cells[i + 2, "A"] = processes[i].PID;
+                    workSheet.Cells[i + 2, "B"] = processes[i].arrivalTime;
+                    workSheet.Cells[i + 2, "C"] = processes[i].responseTime;
+                    workSheet.Cells[i + 2, "D"] = processes[i].completedTime;
+
+                    workSheet.Cells[i + 2, "F"] = processes[i].responseTime - processes[i].arrivalTime;
+                }
+
+                workSheet.Cells[1, "H"] = "Avg Turnaround";
+                workSheet.Cells[2, "H"] = "=AVERAGE(F2:F1001)";
+
+
+                //Add second worksheet
+                
+
+                //Add values to sheet
+                workSheet.Cells[1, "A"] = "PID";
+                workSheet.Cells[1, "B"] = "Arrival Time";
+                workSheet.Cells[1, "C"] = "Response Time (Raw)";
+                workSheet.Cells[1, "D"] = "Completion Time";
+
+                workSheet.Cells[1, "F"] = "Turnaround Time";
+                for (int i = 0; i < processes.Count(); i++)
+                {
+                    workSheet.Cells[i + 2, "A"] = processes[i].PID;
+                    workSheet.Cells[i + 2, "B"] = processes[i].arrivalTime;
+                    workSheet.Cells[i + 2, "C"] = processes[i].responseTime;
+                    workSheet.Cells[i + 2, "D"] = processes[i].completedTime;
+
+                    workSheet.Cells[i + 2, "F"] = processes[i].responseTime - processes[i].arrivalTime;
+                }
+
+                workSheet.Cells[1, "H"] = "Avg Turnaround";
+                workSheet.Cells[2, "H"] = "=AVERAGE(F2:F1001)";
+            }
+
+            
         }
     }
 }
