@@ -55,6 +55,7 @@ namespace ProcessScheduler
             excelApp.Visible = true;
             excelApp.Workbooks.Add();
 
+            //BEGIN RUNS
             for(int x = 1; x < 10; x++)
             {
                 //Bring in process input files
@@ -65,7 +66,7 @@ namespace ProcessScheduler
                 Console.WriteLine("Run" + x.ToString() + " complete");
 
 
-
+                //OUTPUT RESULTS TO EXCEL DOC
                 Excel._Worksheet workSheet;
                 if (x != 1) //Add new worksheets
                 {
@@ -74,30 +75,6 @@ namespace ProcessScheduler
                 }
                 else //Create first worksheet
                     workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
-
-                //Add values to sheet
-                workSheet.Cells[1, "A"] = "PID";
-                workSheet.Cells[1, "B"] = "Arrival Time";
-                workSheet.Cells[1, "C"] = "Response Time (Raw)";
-                workSheet.Cells[1, "D"] = "Completion Time";
-
-                workSheet.Cells[1, "F"] = "Turnaround Time";
-                for (int i = 0; i < processes.Count(); i++)
-                {
-                    workSheet.Cells[i + 2, "A"] = processes[i].PID;
-                    workSheet.Cells[i + 2, "B"] = processes[i].arrivalTime;
-                    workSheet.Cells[i + 2, "C"] = processes[i].responseTime;
-                    workSheet.Cells[i + 2, "D"] = processes[i].completedTime;
-
-                    workSheet.Cells[i + 2, "F"] = processes[i].responseTime - processes[i].arrivalTime;
-                }
-
-                workSheet.Cells[1, "H"] = "Avg Turnaround";
-                workSheet.Cells[2, "H"] = "=AVERAGE(F2:F1001)";
-
-
-                //Add second worksheet
-                
 
                 //Add values to sheet
                 workSheet.Cells[1, "A"] = "PID";
