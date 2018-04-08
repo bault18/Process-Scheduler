@@ -48,6 +48,92 @@ namespace ProcessScheduler
             return processes;
         }
 
+        /// <summary>
+        /// Adds a sheet to an excel doc with all the run's data
+        /// </summary>
+        /// <param name="completeProcs">List of completed processes</param>
+        /// <param name="excelApp">Excel doc to output to</param>
+        /// <param name="run">Current Run number</param>
+        static public void outputRun(ref List<Process> completeProcs, ref Excel.Application excelApp, int run)
+        {
+
+            Excel._Worksheet workSheet;
+
+            if (run != 1) //Add new worksheets
+            {
+                excelApp.Worksheets.Add();
+                workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
+                workSheet.Name = "Run" + run.ToString();
+            }
+            else //Create first worksheet
+            {
+                workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
+                workSheet.Name = "Run1";
+            }
+            //Add values to sheet
+            workSheet.Cells[1, "A"] = "PID";
+            workSheet.Cells[1, "B"] = "Arrival Time";
+            workSheet.Cells[1, "C"] = "Response Time (Raw)";
+            workSheet.Cells[1, "D"] = "Completion Time";
+
+            workSheet.Cells[1, "F"] = "Total Processing Time";
+            workSheet.Cells[1, "G"] = "Total Blocked Time";
+            workSheet.Cells[1, "H"] = "Total Scheduling Queue Time";
+            workSheet.Cells[1, "I"] = "Turnaround Time";
+
+            double subToResponse = 0;
+            for (int i = 0; i < completeProcs.Count(); i++)
+            {
+                workSheet.Cells[i + 2, "A"] = completeProcs[i].PID;
+                workSheet.Cells[i + 2, "B"] = completeProcs[i].arrivalTime;
+                workSheet.Cells[i + 2, "C"] = completeProcs[i].responseTime;
+                workSheet.Cells[i + 2, "D"] = completeProcs[i].completedTime;
+
+                workSheet.Cells[i + 2, "F"] = completeProcs[i].totalProcessingTime;
+                workSheet.Cells[i + 2, "G"] = completeProcs[i].blockedTime;
+                workSheet.Cells[i + 2, "H"] = (completeProcs[i].completedTime - completeProcs[i].arrivalTime) - completeProcs[i].blockedTime - completeProcs[i].totalProcessingTime; //Scheduling Time
+                workSheet.Cells[i + 2, "I"] = completeProcs[i].completedTime - completeProcs[i].arrivalTime; //Turnaround time
+
+
+                //Stuff for other data analysis
+                subToResponse += completeProcs[i].responseTime - completeProcs[i].arrivalTime;
+            }
+
+            workSheet.Cells[1, "K"] = "Avg Turnaround";
+            workSheet.Cells[2, "K"] = "=AVERAGE(I2:I1001)";
+
+            workSheet.Cells[4, "K"] = "Avg time from sumbission to first response";
+            workSheet.Cells[5, "K"] = subToResponse/completeProcs.Count();
+        }
+
+        /// <summary>
+        /// Creates a final sheet on Excel doc with statics encompassing every run
+        /// </summary>
+        /// <param name="excelApp">Excel doc to output to</param>
+        static void finalStatistics(ref Excel.Application excelApp)
+        {
+            excelApp.Worksheets.Add();
+            Excel._Worksheet workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
+            string turnaround = "=AVERAGE(Run1!K2";
+            string subToResponse = "=AVERAGE(Run1!K5";
+            for (int runNum = 2; runNum < 5; runNum++)
+            {
+                turnaround += ",Run" + runNum + "!K2";
+                subToResponse += ",Run" + runNum + "!K5";
+            }
+            turnaround += ")";
+            subToResponse += ")";
+
+            workSheet.Cells[1, "A"] = "Avg Turnaround";
+            workSheet.Cells[2, "A"] = turnaround;
+
+            workSheet.Cells[3, "A"] = "Avg Submission to completion";
+            workSheet.Cells[4, "A"] = subToResponse;
+
+            
+        }
+
+
         static void Main(string[] args)
         {
             //Create Excel Doc
@@ -56,48 +142,22 @@ namespace ProcessScheduler
             excelApp.Workbooks.Add();
 
             //BEGIN RUNS
-            for(int x = 1; x < 10; x++)
+            for (int runNum = 1; runNum < 2; runNum++)
             {
                 //Bring in process input files
-                List<Process> processes = getProcesses("\\1_BaseDataSet\\set" + x.ToString() + ".txt");
+                List<Process> processes = getProcesses("\\1_BaseDataSet\\set" + runNum.ToString() + ".txt");
 
-                Dispatcher LS = new Fcfs(processes);
+                Dispatcher LS = new LoadSharing(processes);
                 LS.run();
-                Console.WriteLine("Run" + x.ToString() + " complete");
+                Console.WriteLine("Run" + runNum.ToString() + " complete");
 
 
                 //OUTPUT RESULTS TO EXCEL DOC
-                Excel._Worksheet workSheet;
-                if (x != 1) //Add new worksheets
-                {
-                    excelApp.Worksheets.Add();
-                    workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
-                }
-                else //Create first worksheet
-                    workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
-
-                //Add values to sheet
-                workSheet.Cells[1, "A"] = "PID";
-                workSheet.Cells[1, "B"] = "Arrival Time";
-                workSheet.Cells[1, "C"] = "Response Time (Raw)";
-                workSheet.Cells[1, "D"] = "Completion Time";
-
-                workSheet.Cells[1, "F"] = "Turnaround Time";
-                for (int i = 0; i < processes.Count(); i++)
-                {
-                    workSheet.Cells[i + 2, "A"] = processes[i].PID;
-                    workSheet.Cells[i + 2, "B"] = processes[i].arrivalTime;
-                    workSheet.Cells[i + 2, "C"] = processes[i].responseTime;
-                    workSheet.Cells[i + 2, "D"] = processes[i].completedTime;
-
-                    workSheet.Cells[i + 2, "F"] = processes[i].responseTime - processes[i].arrivalTime;
-                }
-
-                workSheet.Cells[1, "H"] = "Avg Turnaround";
-                workSheet.Cells[2, "H"] = "=AVERAGE(F2:F1001)";
+                outputRun(ref LS.completedProcesses, ref excelApp, runNum);
+                
             }
 
-            
+            finalStatistics(ref excelApp);
         }
     }
 }
