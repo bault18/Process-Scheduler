@@ -10,7 +10,6 @@ namespace ProcessScheduler
 	class MultiLevelFeedback : Dispatcher
 	{
         #region Member Variables
-        public string Name = "MultiLevelFeedback";
         Queue<Process> scheduleQueue;
 		Queue<Process> highPriorityQ;
 		Queue<Process> mediumPriorityQ;
@@ -23,7 +22,8 @@ namespace ProcessScheduler
 		#region Constructors
 		public MultiLevelFeedback(List<Process> processes)
 		{
-			scheduleQueue = new Queue<Process>();
+            Name = "MultiLevelFeedback";
+            scheduleQueue = new Queue<Process>();
 
 			foreach (Process proc in processes)
 			{

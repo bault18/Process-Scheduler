@@ -15,6 +15,7 @@ namespace ProcessScheduler
         #region Constructors
         public SimpleFcfs(List<Process> processes)
         {
+            Name = "SimpleFcfs";
             scheduleQueue = new Queue<Process>();
 
             foreach (Process proc in processes)

@@ -9,7 +9,6 @@ namespace ProcessScheduler
     class LoadSharing : Dispatcher
     {
         #region Member Variables
-        public Name = "LoadSharing";
         private Queue<Process> scheduleQueue;
 
         private List<Proccessor> cores;
@@ -24,6 +23,7 @@ namespace ProcessScheduler
         #region Constructor
         public LoadSharing(List<Process> processes)
         {
+            Name = "LoadSharing";
             numCores = 4;
             scheduleQueue = new Queue<Process>();
             cores = new List<Proccessor>();

@@ -10,7 +10,6 @@ namespace ProcessScheduler
 	class Spn : Dispatcher
 	{
         #region memberVariables
-        public string Name = "ShortedProcessNext";
         double defaultPreviousServiceTime = 0;
 		double defaultExpectedServiceTime = 10;
 		double historicWeight = 0.5; //Between 0 and 1
@@ -21,6 +20,7 @@ namespace ProcessScheduler
         #region Constructors
         public Spn(List<Process> processes)
         {
+            Name = "ShortedProcessNext";
             scheduleQueue = new Queue<Process>();
 
             foreach (Process proc in processes)
