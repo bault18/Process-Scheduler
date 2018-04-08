@@ -62,17 +62,21 @@ namespace ProcessScheduler
             Dispatcher rr = new Roundrobin(getProcesses(dataset + initialFile));
             Dispatcher mlf = new MultiLevelFeedback(getProcesses(dataset + initialFile));
             Dispatcher ls = new LoadSharing(getProcesses(dataset + initialFile));
+            Dispatcher spn = new Spn(getProcesses(dataset + initialFile));
 
             CPU FCFS = new CPU(fcfs);
             CPU RR = new CPU(rr);
             CPU MLF = new CPU(mlf);
             CPU LS = new CPU(ls);
+            CPU SPN = new CPU(spn);
+           // CPU SPN = new CPU(spn);
             List<Thread> threads = new List<Thread>();
 
             threads.Add(new Thread(delegate () { FCFS.runAlg(dataset); }));
-            threads.Add(new Thread(delegate () { RR.runAlg(dataset); }));
-            threads.Add(new Thread(delegate () { MLF.runAlg(dataset); }));
-            threads.Add(new Thread(delegate () { LS.runAlg(dataset); }));
+            //threads.Add(new Thread(delegate () { RR.runAlg(dataset); }));
+            //threads.Add(new Thread(delegate () { MLF.runAlg(dataset); }));
+            //threads.Add(new Thread(delegate () { LS.runAlg(dataset); }));
+            //threads.Add(new Thread(delegate () { SPN.runAlg(dataset); }));
 
             foreach (Thread currthread in threads)
                 currthread.Start();

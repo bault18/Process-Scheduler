@@ -7,12 +7,14 @@ using Microsoft.Office.Core;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Threading;
 using System.IO;
+using System.Reflection;
 
 namespace ProcessScheduler
 {
     class CPU
     {
         private Dispatcher scheduler;
+        private int numRuns = 3;
         public CPU(Dispatcher schedul)
         {
             scheduler = schedul;
@@ -119,7 +121,7 @@ namespace ProcessScheduler
             Excel._Worksheet workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
             string turnaround = "=AVERAGE(Run1!K2";
             string response = "=AVERAGE(Run1!K5";
-            for (int runNum = 2; runNum < 5; runNum++)
+            for (int runNum = 2; runNum < numRuns; runNum++)
             {
                 turnaround += ",Run" + runNum + "!K2";
                 response += ",Run" + runNum + "!K5";
@@ -135,6 +137,8 @@ namespace ProcessScheduler
 
             workSheet.Cells[1, "C"] = scheduler.Name;
 
+            excelApp.ActiveWorkbook.SaveAs(Directory.GetCurrentDirectory() + "\\" + scheduler.Name);
+
 
         }
 
@@ -146,7 +150,7 @@ namespace ProcessScheduler
             excelApp.Workbooks.Add();
 
             //BEGIN RUNS
-            for (int runNum = 1; runNum < 5; runNum++)
+            for (int runNum = 1; runNum < numRuns; runNum++)
             {
                 //Bring in process input files
                 List<Process> processes = getProcesses(dataSet + "\\set" + runNum.ToString() + ".txt");
