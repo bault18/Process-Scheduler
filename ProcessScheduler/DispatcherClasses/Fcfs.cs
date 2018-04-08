@@ -9,7 +9,7 @@ namespace ProcessScheduler
     class Fcfs : Dispatcher
     {
         #region Member Variables
-        Queue<Process> scheduleQueue;
+        public Queue<Process> scheduleQueue;
         #endregion
 
         #region Constructors
@@ -41,6 +41,10 @@ namespace ProcessScheduler
             }
         }
 
+        public void AddProcess(Process process)
+        {
+            scheduleQueue.Enqueue(process);
+        }
 
         //take top and throw in processor
         public override void swapProcesses()
@@ -91,6 +95,11 @@ namespace ProcessScheduler
                     proc--;                                     //Prevent memory access errors
                 }
             }
+        }
+
+        public int Count()
+        {
+            return scheduleQueue.Count;
         }
     }
 }

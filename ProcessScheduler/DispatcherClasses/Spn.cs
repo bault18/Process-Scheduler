@@ -15,8 +15,21 @@ namespace ProcessScheduler.DispatcherClasses
 		double historicWeight = 0.5; //Between 0 and 1
 
 		Queue<Process> scheduleQueue;
-		#endregion
-		public override void addNewProcess()
+        #endregion
+
+        #region Constructors
+        public Spn(List<Process> processes)
+        {
+            scheduleQueue = new Queue<Process>();
+
+            foreach (Process proc in processes)
+                arrivalQueue.Enqueue(proc);
+
+            arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
+        }
+        #endregion
+
+        public override void addNewProcess()
 		{
 			while (arrivalQueue.Count > 0) //Do not run if no procs to queue
 			{
@@ -32,9 +45,8 @@ namespace ProcessScheduler.DispatcherClasses
 			}
 		}
 
-
-		//take top and throw in processor
-		public override void swapProcesses()
+        //take top and throw in processor
+        public override void swapProcesses()
 		{
 			double expectedServiceTime = 0; //Expected burst time for an interactive process. Expected total execution time for a batch process
 			double previousServiceTime = 0; //Previous burst time for an interactive process. Previous total execution time for a batch process
