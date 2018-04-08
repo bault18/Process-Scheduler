@@ -14,8 +14,8 @@ namespace ProcessScheduler.DispatcherClasses
 		Queue<Process> highPriorityQ;
 		Queue<Process> mediumPriorityQ;
 		Queue<Process> lowPriorityQ;
-		Roundrobin catchQ;
-
+		Fcfs catchQ;
+        int[] quanta = { 5, 10, 15, 20 };
 		int quantum = 5;
 		#endregion
 
@@ -30,7 +30,12 @@ namespace ProcessScheduler.DispatcherClasses
 				arrivalQueue.Enqueue(proc);
 			}
 			arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
-		}
+            highPriorityQ = new Queue<Process>();
+            mediumPriorityQ = new Queue<Process>();
+            lowPriorityQ = new Queue<Process>();
+            catchQ = new Fcfs();
+
+        }
 		#endregion
 
 		//Check if new processes need to go into scheduling queue

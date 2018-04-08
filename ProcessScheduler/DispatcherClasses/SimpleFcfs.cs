@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace ProcessScheduler
 {
-    class Fcfs : Dispatcher
+    class SimpleFcfs : Dispatcher
     {
         #region Member Variables
         public Queue<Process> scheduleQueue;
         #endregion
 
         #region Constructors
-        public Fcfs(List<Process> processes)
+        public SimpleFcfs(List<Process> processes)
         {
             scheduleQueue = new Queue<Process>();
 
@@ -22,12 +22,16 @@ namespace ProcessScheduler
 
             arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
         }
+        public SimpleFcfs()
+        {
+            scheduleQueue = new Queue<Process>();
+        }
         #endregion
 
         //Check if new processes need to go into scheduling queue
         public override void addNewProcess()
         {
-            while(arrivalQueue.Count > 0) //Do not run if no procs to queue
+            while (arrivalQueue.Count > 0) //Do not run if no procs to queue
             {
                 Process proc = arrivalQueue.Peek(); //Look at top item in queue without removing from queue
 
@@ -78,17 +82,13 @@ namespace ProcessScheduler
                 contextSwitch();
                 checkBlockedQueue();
             }
-            else
-            {
-                CPUTime++;
-            }
         }
 
         public override void checkBlockedQueue()
         {
-            for(int proc = 0; proc < blockedQueue.Count(); proc++)
+            for (int proc = 0; proc < blockedQueue.Count(); proc++)
             {
-                if(blockedQueue[proc].blockExitTime <= CPUTime)
+                if (blockedQueue[proc].blockExitTime <= CPUTime)
                 {
                     scheduleQueue.Enqueue(blockedQueue[proc]);  //Put process back into scheduler
                     blockedQueue.RemoveAt(proc);                //Remove process from blocked queue
