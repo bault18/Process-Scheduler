@@ -12,8 +12,11 @@ namespace ProcessScheduler
 {
     class CPU
     {
-
-        public CPU() { }
+        private Dispatcher scheduler;
+        public CPU(Dispatcher schedul)
+        {
+            scheduler = schedul;
+        }
 
         /// <summary>
         /// Used to retrieve process information from files
@@ -110,7 +113,7 @@ namespace ProcessScheduler
         /// <summary>
         /// Creates a final sheet on Excel doc with statics encompassing every run
         /// </summary>
-        static private void finalStatistics(ref Excel.Application excelApp)
+        private void finalStatistics(ref Excel.Application excelApp)
         {
             excelApp.Worksheets.Add();
             Excel._Worksheet workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
@@ -130,10 +133,12 @@ namespace ProcessScheduler
             workSheet.Cells[3, "A"] = "Avg Response Time";
             workSheet.Cells[4, "A"] = response;
 
+            workSheet.Cells[1, "C"] = scheduler.
+
 
         }
 
-        public void runAlg(Dispatcher scheduler, string dataSet)
+        public void runAlg(string dataSet)
         {
             //Create Excel Doc
             var excelApp = new Excel.Application();
@@ -144,7 +149,7 @@ namespace ProcessScheduler
             for (int runNum = 1; runNum < 5; runNum++)
             {
                 //Bring in process input files
-                List<Process> processes = getProcesses(dataSet + runNum.ToString() + ".txt");
+                List<Process> processes = getProcesses(dataSet + "\\set" + runNum.ToString() + ".txt");
 
                 scheduler.run();
                 Console.WriteLine("Run" + runNum.ToString() + " complete");

@@ -14,6 +14,7 @@ namespace ProcessScheduler
 
         public Process currProcess; //current process being executed by CPU
 
+        public string Name;
         public int CPUTime; //Total time executed by cpu
         int contextSwtichTime;
         int numContextSwitch;
