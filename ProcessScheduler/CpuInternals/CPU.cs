@@ -133,7 +133,7 @@ namespace ProcessScheduler
             workSheet.Cells[3, "A"] = "Avg Response Time";
             workSheet.Cells[4, "A"] = response;
 
-            workSheet.Cells[1, "C"] = scheduler.
+            workSheet.Cells[1, "C"] = scheduler.Name;
 
 
         }
