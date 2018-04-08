@@ -8,6 +8,7 @@ namespace ProcessScheduler
 {
     class Roundrobin : Dispatcher
     {
+        public string Name = "RoundRobin";
         int quantumTime; 
 		
         public Queue<Process> scheduleQueue;

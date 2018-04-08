@@ -9,8 +9,9 @@ namespace ProcessScheduler
 {
 	class MultiLevelFeedback : Dispatcher
 	{
-		#region Member Variables
-		Queue<Process> scheduleQueue;
+        #region Member Variables
+        public string Name = "MultiLevelFeedback";
+        Queue<Process> scheduleQueue;
 		Queue<Process> highPriorityQ;
 		Queue<Process> mediumPriorityQ;
 		Queue<Process> lowPriorityQ;

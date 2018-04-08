@@ -9,8 +9,9 @@ namespace ProcessScheduler
 	//Shortest Process Next
 	class Spn : Dispatcher
 	{
-		#region memberVariables
-		double defaultPreviousServiceTime = 0;
+        #region memberVariables
+        public string Name = "ShortedProcessNext";
+        double defaultPreviousServiceTime = 0;
 		double defaultExpectedServiceTime = 10;
 		double historicWeight = 0.5; //Between 0 and 1
 

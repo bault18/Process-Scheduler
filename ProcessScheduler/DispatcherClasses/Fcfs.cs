@@ -9,6 +9,7 @@ namespace ProcessScheduler
     class Fcfs : Dispatcher
     {
         #region Member Variables
+        public string Name = "FirstComeFirstServed";
         public Queue<Process> scheduleQueue;
         #endregion
 
