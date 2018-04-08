@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CpuInternals\CPU.cs" />
+    <Compile Include="DataOutput.cs" />
     <Compile Include="DispatcherClasses\Dispatcher.cs" />
     <Compile Include="DispatcherClasses\Fcfs.cs" />
     <Compile Include="CpuInternals\Process.cs" />
