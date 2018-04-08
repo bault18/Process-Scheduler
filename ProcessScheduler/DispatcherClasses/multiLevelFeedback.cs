@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ProcessScheduler;
 
-namespace ProcessScheduler.DispatcherClasses
+namespace ProcessScheduler
 {
 	class MultiLevelFeedback : Dispatcher
 	{
