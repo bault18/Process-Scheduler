@@ -89,8 +89,10 @@ namespace ProcessScheduler
 				currProcess.priority++; //Reduce the process's priority
 				if (burstTime > quantum) //Then the event will not finish this quantum
 				{
-					currProcess.remainingEvents.First.Value -= quantum; //subtract the quantum from the current burst time
-					ShiftQueues(currProcess); //And send the process to the appropriate queue
+                    int remainingTime = burstTime - quantum;
+                    remainingTime = remainingTime < 0 ? 0 : remainingTime;
+                    currProcess.remainingEvents.First.Value = remainingTime; //subtract the quantum from the current burst time
+					ShiftQueues(currProcess); //And send the process to the back of the appropriate queue
 				}
 				else
 				{ //The event will finish this quantum
