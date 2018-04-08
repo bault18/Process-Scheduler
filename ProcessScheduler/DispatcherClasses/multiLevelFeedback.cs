@@ -93,6 +93,7 @@ namespace ProcessScheduler.DispatcherClasses
 					if (currProcess.remainingEvents.Count() > 0) //process is blocked by IO
 					{
 						blockProcess(currProcess);
+
 					}
 					else //Process is complete
 					{

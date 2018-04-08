@@ -16,13 +16,17 @@ namespace ProcessScheduler
         private LinkedList<int> RemainingEvents;
         public int blockExitTime; //Time process exits block queue
         public int priority; //Linux style priority. The lower the value, the higher the priority
-
+		public double predictedBurst;
 
         public int schedulingTime;  //Total time spend in process scheduler TODO: do we need this? this is just = Completed - Arrival
         public int blockedTime;     //Time blocked by I/O
         public int completedTime;   //Time of process completion
         public int totalProcessingTime;
         public int responseTime;    //Time (raw) first hit processor
+
+		public int processTimeInCurrentQ; //Execution time of the process while assigned to its current queue.
+		public int previousBurstTime; //The last CPU burst executed by this process
+		public int previousGuessBurstTime; //The last guess we made for the expected burst time
 
         #endregion
 
@@ -34,7 +38,11 @@ namespace ProcessScheduler
             schedulingTime = 0;
             blockedTime = 0;
             responseTime = -1;
-            RemainingEvents = new LinkedList<int>();
+			priority = -1;
+			predictedBurst = 0;
+			processTimeInCurrentQ = 0;
+			previousBurstTime = 0;
+			RemainingEvents = new LinkedList<int>();
             CompletedEvents = new List<int>();
 
             foreach(int evnt in events) //Create event queue

@@ -50,6 +50,7 @@
     <Compile Include="DispatcherClasses\MultiLevelFeedback.cs" />
     <Compile Include="DispatcherClasses\Roundrobin.cs" />
     <Compile Include="DispatcherClasses\LoadSharing.cs" />
+    <Compile Include="DispatcherClasses\Spn.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
