@@ -10,7 +10,7 @@ namespace ProcessScheduler.DispatcherClasses
 	class Spn : Dispatcher
 	{
 		#region memberVariables
-		double defaultPreviousServiceTime = 10;
+		double defaultPreviousServiceTime = 0;
 		double defaultExpectedServiceTime = 10;
 		double historicWeight = 0.5; //Between 0 and 1
 

@@ -30,9 +30,11 @@ namespace ProcessScheduler.DispatcherClasses
 				arrivalQueue.Enqueue(proc);
 			}
 			arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
-            Queue<Process> highPriorityQ = new Queue<Process>();
-            Queue<Process> mediumPriorityQ = new Queue<Process>();
-            Queue<Process> lowPriorityQ = new Queue<Process>();
+            highPriorityQ = new Queue<Process>();
+            mediumPriorityQ = new Queue<Process>();
+            lowPriorityQ = new Queue<Process>();
+            catchQ = new Fcfs();
+
         }
 		#endregion
 
