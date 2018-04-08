@@ -146,7 +146,7 @@ namespace ProcessScheduler
         {
             //Create Excel Doc
             var excelApp = new Excel.Application();
-            excelApp.Visible = true;
+            excelApp.Visible = false;
             excelApp.Workbooks.Add();
 
             //BEGIN RUNS
@@ -165,6 +165,7 @@ namespace ProcessScheduler
             }
 
             finalStatistics(ref excelApp);
+            excelApp.Quit();
         }
     }
 }
