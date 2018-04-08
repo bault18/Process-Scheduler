@@ -14,7 +14,7 @@ namespace ProcessScheduler.DispatcherClasses
 		Queue<Process> highPriorityQ;
 		Queue<Process> mediumPriorityQ;
 		Queue<Process> lowPriorityQ;
-		Fcfs catchQ;
+		SimpleFcfs catchQ;
         int[] quanta = { 5, 10, 15, 20 };
 		int quantum = 5;
 		#endregion
@@ -33,7 +33,7 @@ namespace ProcessScheduler.DispatcherClasses
             highPriorityQ = new Queue<Process>();
             mediumPriorityQ = new Queue<Process>();
             lowPriorityQ = new Queue<Process>();
-            catchQ = new Fcfs();
+            catchQ = new SimpleFcfs();
 
         }
 		#endregion
