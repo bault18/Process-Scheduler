@@ -4,13 +4,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProcessScheduler.DispatcherClasses
+namespace ProcessScheduler
 {
     class Roundrobin : Dispatcher
     {
-        int quantumTime = 5; 
+        int quantumTime; 
 		
         public Queue<Process> scheduleQueue;
+
+        public Roundrobin(List<Process> processes)
+        {
+            quantumTime = 5;
+
+            scheduleQueue = new Queue<Process>();
+
+            foreach (Process proc in processes)
+                arrivalQueue.Enqueue(proc);
+
+            arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
+        }
+
+        public Roundrobin(List<Process> processes, int quantum)
+        {
+            quantumTime = quantum;
+
+            scheduleQueue = new Queue<Process>();
+
+            foreach (Process proc in processes)
+                arrivalQueue.Enqueue(proc);
+
+            arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
+        }
+
+
 
         public override void addNewProcess()
         {
