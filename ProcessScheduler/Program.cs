@@ -142,12 +142,12 @@ namespace ProcessScheduler
             excelApp.Workbooks.Add();
 
             //BEGIN RUNS
-            for (int runNum = 1; runNum < 2; runNum++)
+            for (int runNum = 1; runNum < 5; runNum++)
             {
                 //Bring in process input files
                 List<Process> processes = getProcesses("\\1_BaseDataSet\\set" + runNum.ToString() + ".txt");
 
-                Dispatcher LS = new LoadSharing(processes);
+                Dispatcher LS = new Fcfs(processes);
                 LS.run();
                 Console.WriteLine("Run" + runNum.ToString() + " complete");
 
