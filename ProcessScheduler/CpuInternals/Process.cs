@@ -37,7 +37,7 @@ namespace ProcessScheduler
             schedulingTime = 0;
             blockedTime = 0;
             responseTime = -1;
-			priority = -1;
+			priority = 0;
 			predictedBurst = 0;
 			previousBurstTime = 0;
 			RemainingEvents = new LinkedList<int>();

@@ -93,7 +93,8 @@ namespace ProcessScheduler
 			{
                 int quantum = quanta[currProcess.priority]; //get the time quantum for the process's current queue
 				int burstTime = currProcess.remainingEvents.First.Value;  //Get current CPU burst time
-				currProcess.priority = (currProcess.priority + 1) % 4; //Reduce the process's priority
+                //Reduce the process's priority
+                currProcess.priority = currProcess.priority > 2 ? 3 : currProcess.priority + 1;
 				if (burstTime > quantum) //If the event will not finish this quantum
 				{
                     int remainingTime = burstTime - quantum; //update the time remaining for this event
