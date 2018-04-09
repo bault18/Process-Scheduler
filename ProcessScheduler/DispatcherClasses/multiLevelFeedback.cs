@@ -16,7 +16,7 @@ namespace ProcessScheduler
 		Queue<Process> lowPriorityQ;
 		SimpleFcfs catchQ;
         int[] quanta = { 5, 10, 15, 20 };
-		int quantum = 5;
+
 		#endregion
 
 		#region Constructors
@@ -37,10 +37,35 @@ namespace ProcessScheduler
             catchQ = new SimpleFcfs();
 
         }
-		#endregion
 
-		//Check if new processes need to go into scheduling queue
-		public override void addNewProcess()
+        //Set the quanta array via constructor
+        //THE newQuanta PARAMETER MUST HAVE LENGTH 4
+        public MultiLevelFeedback(List<Process> processes, int[] newQuanta)
+        {
+            Name = "MultiLevelFeedback";
+            if (newQuanta.Length != 4)
+            {
+                throw new ArgumentOutOfRangeException("newQuanta must be length 4");
+            }
+            quanta = newQuanta;
+            scheduleQueue = new Queue<Process>();
+
+            foreach (Process proc in processes)
+            {
+                proc.priority = 0;              //Set the initial priority of each process to high
+                arrivalQueue.Enqueue(proc);
+            }
+            arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
+            highPriorityQ = new Queue<Process>();
+            mediumPriorityQ = new Queue<Process>();
+            lowPriorityQ = new Queue<Process>();
+            catchQ = new SimpleFcfs();
+
+        }
+        #endregion
+
+        //Check if new processes need to go into scheduling queue
+        public override void addNewProcess()
 		{
 			while (arrivalQueue.Count > 0) //Do not run if no procs to queue
 			{
@@ -85,12 +110,12 @@ namespace ProcessScheduler
 			}
 			if (currProcess != null)
 			{
+                int quantum = quanta[currProcess.priority]; //get the time quantum for the process's current queue
 				int burstTime = currProcess.remainingEvents.First.Value;  //Get current CPU burst time
 				currProcess.priority++; //Reduce the process's priority
-				if (burstTime > quantum) //Then the event will not finish this quantum
+				if (burstTime > quantum) //If the event will not finish this quantum
 				{
-                    int remainingTime = burstTime - quantum;
-                    remainingTime = remainingTime < 0 ? 0 : remainingTime;
+                    int remainingTime = burstTime - quantum; //update the time remaining for this event
                     currProcess.remainingEvents.First.Value = remainingTime; //subtract the quantum from the current burst time
 					ShiftQueues(currProcess); //And send the process to the back of the appropriate queue
 				}
@@ -136,6 +161,7 @@ namespace ProcessScheduler
 			}
 		}
 
+        //Queue a process based on its priority
 		private void ShiftQueues(Process currProcess)
 		{
 			switch (currProcess.priority) {
