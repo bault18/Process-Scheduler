@@ -17,7 +17,7 @@ namespace ProcessScheduler
         public string Name;
         public int CPUTime; //Total time executed by cpu
         int contextSwtichTime;
-        int numContextSwitch;
+        public int numContextSwitch;
 
         public Dispatcher() {
             CPUTime = 0;
