@@ -66,13 +66,15 @@ namespace ProcessScheduler
 
             CPU FCFS = new CPU(fcfs);
             CPU RR = new CPU(rr);
-            CPU MLF = new CPU(mlf);
+            //CPU MLF = new CPU(mlf);
             CPU LS = new CPU(ls);
-            CPU SPN = new CPU(spn);
-           // CPU SPN = new CPU(spn);
+            //CPU SPN = new CPU(spn);
+
+            RR.runAlg(dataset);
+
             List<Thread> threads = new List<Thread>();
 
-            threads.Add(new Thread(delegate () { FCFS.runAlg(dataset); }));
+            //threads.Add(new Thread(delegate () { FCFS.runAlg(dataset); }));
             //threads.Add(new Thread(delegate () { RR.runAlg(dataset); }));
             //threads.Add(new Thread(delegate () { MLF.runAlg(dataset); }));
             //threads.Add(new Thread(delegate () { LS.runAlg(dataset); }));
