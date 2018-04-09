@@ -14,7 +14,7 @@ namespace ProcessScheduler
     class CPU
     {
         private Dispatcher scheduler;
-        private int numRuns = 100;
+        private int numRuns = 25;
         public CPU(Dispatcher schedul)
         {
             scheduler = schedul;
@@ -119,10 +119,10 @@ namespace ProcessScheduler
             workSheet.Cells[8, "K"] = blockedTime / completeProcs.Count();
 
             workSheet.Cells[10, "K"] = "Avg Wait Time";
-            workSheet.Cells[11, "K"] = waitTime;
+            workSheet.Cells[11, "K"] = waitTime / completeProcs.Count();
 
             workSheet.Cells[13, "K"] = "Throughput";
-            workSheet.Cells[14, "K"] = "=A1000/999";
+            workSheet.Cells[14, "K"] = "=A1000/" + completeProcs.Count().ToString();
 
             workSheet.Cells[16, "K"] = "Num Context Switches";
             workSheet.Cells[17, "K"] = scheduler.numContextSwitch;
@@ -186,7 +186,7 @@ namespace ProcessScheduler
         {
             //Create Excel Doc
             var excelApp = new Excel.Application();
-            excelApp.Visible = true;
+            excelApp.Visible = false;
             excelApp.Workbooks.Add();
 
             //BEGIN RUNS

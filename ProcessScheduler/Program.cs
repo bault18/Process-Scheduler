@@ -79,8 +79,20 @@ namespace ProcessScheduler
 
         static void Main(string[] args)
         {
-            collectData("1_BaseDataSet");
 
+            string dataset = "1_BaseDataSet";
+            Dispatcher fcfs = new Fcfs();
+            Dispatcher rr = new Roundrobin();
+            Dispatcher spn = new Spn();
+
+            CPU FCFS = new CPU(fcfs);
+            CPU RR = new CPU(rr);
+            CPU SPN = new CPU(spn);
+
+
+            FCFS.runAlg(dataset);
+            RR.runAlg(dataset);
+            SPN.runAlg(dataset);
             //TODO: Uncomment
             /*
             collectData("\\2_LowIOProbability");
@@ -90,9 +102,9 @@ namespace ProcessScheduler
             collectData("\\5_LongJobs");
             */
 
-            
-            
- 
+
+
+
         }
     }
 
