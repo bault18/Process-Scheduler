@@ -58,6 +58,7 @@ namespace ProcessScheduler
 			{
 				SortScheduleQ();
                 currProcess = scheduleQueue.Dequeue(); //Fetch process from front of dispatch queue
+                //If the time value is zero, use the default value instead
                 previousServiceTime = currProcess.previousBurstTime > 0 ? currProcess.previousBurstTime : defaultPreviousServiceTime;
 				expectedServiceTime = currProcess.predictedBurst > 0 ? currProcess.predictedBurst : defaultExpectedServiceTime; 
 				
@@ -72,6 +73,8 @@ namespace ProcessScheduler
 				//Update CPU clock, update data collection
 				CPUTime += burstTime;
 				currProcess.totalProcessingTime += burstTime;
+                currProcess.previousBurstTime = burstTime;
+                currProcess.previousGuessBurstTime = currProcess.predictedBurst;
 
 				//check if I/O event occurs
 				if (currProcess.remainingEvents.Count() > 0) //IO event occurs

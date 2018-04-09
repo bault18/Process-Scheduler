@@ -24,9 +24,8 @@ namespace ProcessScheduler
         public int totalProcessingTime;
         public int responseTime;    //Time (raw) first hit processor
 
-		public int processTimeInCurrentQ; //Execution time of the process while assigned to its current queue.
 		public int previousBurstTime; //The last CPU burst executed by this process
-		public int previousGuessBurstTime; //The last guess we made for the expected burst time
+		public double previousGuessBurstTime; //The last guess we made for the expected burst time
 
         #endregion
 
@@ -40,7 +39,6 @@ namespace ProcessScheduler
             responseTime = -1;
 			priority = -1;
 			predictedBurst = 0;
-			processTimeInCurrentQ = 0;
 			previousBurstTime = 0;
 			RemainingEvents = new LinkedList<int>();
             CompletedEvents = new List<int>();
