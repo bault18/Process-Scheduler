@@ -53,7 +53,7 @@ namespace ProcessScheduler
 
         public void run()
         {
-            while (completedProcesses.Count() < 1000) //TODO: Fix this static number
+            while (completedProcesses.Count() < 1000)
             {
                 addNewProcess();
                 swapProcesses();

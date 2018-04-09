@@ -14,7 +14,7 @@ namespace ProcessScheduler
     class CPU
     {
         private Dispatcher scheduler;
-        private int numRuns = 4;        //TODO: set to 100
+        private int numRuns = 100;
         public CPU(Dispatcher schedul)
         {
             scheduler = schedul;
@@ -131,7 +131,7 @@ namespace ProcessScheduler
         /// <summary>
         /// Creates a final sheet on Excel doc with statics encompassing every run
         /// </summary>
-        private void finalStatistics(ref Excel.Application excelApp)
+        private void finalStatistics(ref Excel.Application excelApp, string dataset)
         {
             excelApp.Worksheets.Add();
             Excel._Worksheet workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
@@ -176,7 +176,7 @@ namespace ProcessScheduler
             workSheet.Cells[17, "A"] = contextswitch;
 
             Console.WriteLine(scheduler.Name);
-            Console.WriteLine(Directory.GetCurrentDirectory() + "\\" + scheduler.Name);
+            Console.WriteLine(Directory.GetCurrentDirectory() + "\\" + dataset + scheduler.Name);
             excelApp.ActiveWorkbook.SaveAs(Directory.GetCurrentDirectory() + "\\" + scheduler.Name);
 
 
@@ -193,7 +193,7 @@ namespace ProcessScheduler
             for (int runNum = 1; runNum < numRuns; runNum++)
             {
                 //Bring in process input files
-                List<Process> processes = getProcesses(dataSet + "\\set" + runNum.ToString() + ".txt");
+                List<Process> processes = getProcesses("\\" + dataSet + "\\set" + runNum.ToString() + ".txt");
 
                 scheduler.setArrivalQueue(processes);
                 scheduler.run();
@@ -205,7 +205,7 @@ namespace ProcessScheduler
                 scheduler.reset();
             }
 
-            finalStatistics(ref excelApp);
+            finalStatistics(ref excelApp, dataSet);
             excelApp.Quit();
         }
     }

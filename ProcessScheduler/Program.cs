@@ -41,18 +41,18 @@ namespace ProcessScheduler
 
         public static void LowTimeQuanta()
         {
-            string dataset = "\\1_BaseDataSet";
-            Dispatcher rr = new Roundrobin(10);
-            Dispatcher spn = new Spn();
+            string dataset = "1_BaseDataSet";
+            Dispatcher rr = new Roundrobin(3);
+            Dispatcher mlf = new MultiLevelFeedback(1,5,10,15);
             
             CPU RR = new CPU(rr);
-            CPU SPN = new CPU(spn);
+            CPU MLF = new CPU(mlf);
 
 
             List<Thread> threads = new List<Thread>();
             
             threads.Add(new Thread(delegate () { RR.runAlg(dataset); }));
-            threads.Add(new Thread(delegate () { SPN.runAlg(dataset); }));
+            threads.Add(new Thread(delegate () { MLF.runAlg(dataset); }));
 
             foreach (Thread currthread in threads)
                 currthread.Start();
@@ -60,24 +60,18 @@ namespace ProcessScheduler
 
         public static void highTimeQuanta()
         {
-            string dataset = "\\1_BaseDataSet";
-            Dispatcher fcfs = new Fcfs();
-            Dispatcher rr = new Roundrobin();
-            //Dispatcher mlf = new MultiLevelFeedback();
-            Dispatcher ls = new LoadSharing();
-            //Dispatcher spn = new Spn();
+            string dataset = "1_BaseDataSet";
+            Dispatcher rr = new Roundrobin(3);
+            Dispatcher mlf = new MultiLevelFeedback(10,20,30,40);
 
             CPU RR = new CPU(rr);
-            //CPU MLF = new CPU(mlf);
-            CPU LS = new CPU(ls);
-            //CPU SPN = new CPU(spn);
+            CPU MLF = new CPU(mlf);
 
-            FCFS.runAlg(dataset);
 
             List<Thread> threads = new List<Thread>();
 
             threads.Add(new Thread(delegate () { RR.runAlg(dataset); }));
-            threads.Add(new Thread(delegate () { SPN.runAlg(dataset); }));
+            threads.Add(new Thread(delegate () { MLF.runAlg(dataset); }));
 
             foreach (Thread currthread in threads)
                 currthread.Start();
@@ -85,14 +79,16 @@ namespace ProcessScheduler
 
         static void Main(string[] args)
         {
-            collectData("\\1_BaseDataSet");
+            collectData("1_BaseDataSet");
 
+            //TODO: Uncomment
+            /*
             collectData("\\2_LowIOProbability");
             collectData("\\3_HighIOProbability");
 
             collectData("\\4_ShortJobs");
             collectData("\\5_LongJobs");
-
+            */
 
             
             
