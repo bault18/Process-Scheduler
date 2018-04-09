@@ -123,8 +123,6 @@ namespace ProcessScheduler
 
             workSheet.Cells[13, "K"] = "Throughput";
             workSheet.Cells[14, "K"] = "=A1000/999";
-
-            workSheet.Cells[10, "Q"] = run;
         }
 
         /// <summary>
@@ -188,7 +186,7 @@ namespace ProcessScheduler
 
                 //OUTPUT RESULTS TO EXCEL DOC
                 outputRun(ref scheduler.completedProcesses, ref excelApp, runNum);
-
+                scheduler.reset();
             }
 
             finalStatistics(ref excelApp);

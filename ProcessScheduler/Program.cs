@@ -59,15 +59,15 @@ namespace ProcessScheduler
             string initialFile = "\\set1.txt";
             Dispatcher fcfs = new Fcfs();
             Dispatcher rr = new Roundrobin();
-            Dispatcher mlf = new MultiLevelFeedback();
+            //Dispatcher mlf = new MultiLevelFeedback();
             Dispatcher ls = new LoadSharing();
-            Dispatcher spn = new Spn();
+            //Dispatcher spn = new Spn();
 
             CPU FCFS = new CPU(fcfs);
             CPU RR = new CPU(rr);
-            CPU MLF = new CPU(mlf);
+            //CPU MLF = new CPU(mlf);
             CPU LS = new CPU(ls);
-            CPU SPN = new CPU(spn);
+            //CPU SPN = new CPU(spn);
 
             FCFS.runAlg(dataset);
 

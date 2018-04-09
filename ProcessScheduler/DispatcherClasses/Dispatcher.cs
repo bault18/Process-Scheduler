@@ -68,6 +68,15 @@ namespace ProcessScheduler
             arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
         }
 
+        public void reset()
+        {
+            arrivalQueue.Clear();
+            completedProcesses.Clear();
+            blockedQueue.Clear();
+            CPUTime = 0;
+            numContextSwitch = 0;
+    }
+
         public abstract void addNewProcess();
         public abstract void swapProcesses();
         public abstract void checkBlockedQueue();
