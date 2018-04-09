@@ -57,20 +57,19 @@ namespace ProcessScheduler
 
             string dataset = "\\1_BaseDataSet";
             string initialFile = "\\set1.txt";
-            List<Process> procs = getProcesses(dataset + initialFile);
-            Dispatcher fcfs = new Fcfs(getProcesses(dataset + initialFile));
-            Dispatcher rr = new Roundrobin(getProcesses(dataset + initialFile));
-            Dispatcher mlf = new MultiLevelFeedback(getProcesses(dataset + initialFile));
-            Dispatcher ls = new LoadSharing(getProcesses(dataset + initialFile));
-            Dispatcher spn = new Spn(getProcesses(dataset + initialFile));
+            Dispatcher fcfs = new Fcfs();
+            Dispatcher rr = new Roundrobin();
+            Dispatcher mlf = new MultiLevelFeedback();
+            Dispatcher ls = new LoadSharing();
+            Dispatcher spn = new Spn();
 
             CPU FCFS = new CPU(fcfs);
             CPU RR = new CPU(rr);
-            //CPU MLF = new CPU(mlf);
+            CPU MLF = new CPU(mlf);
             CPU LS = new CPU(ls);
-            //CPU SPN = new CPU(spn);
+            CPU SPN = new CPU(spn);
 
-            RR.runAlg(dataset);
+            FCFS.runAlg(dataset);
 
             List<Thread> threads = new List<Thread>();
 

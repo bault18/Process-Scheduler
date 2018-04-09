@@ -21,7 +21,7 @@ namespace ProcessScheduler
         #endregion
 
         #region Constructor
-        public LoadSharing(List<Process> processes)
+        public LoadSharing()
         {
             Name = "LoadSharing";
             numCores = 4;
@@ -41,11 +41,6 @@ namespace ProcessScheduler
             
             nextOpenCoreTime = 0;
             nextOpenCore = 0;
-
-            foreach (Process proc in processes)
-                arrivalQueue.Enqueue(proc);
-
-            arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
         }
 
         #endregion
@@ -70,12 +65,21 @@ namespace ProcessScheduler
         {
             if (scheduleQueue.Count > 0 || nextOpenCoreTime <= CPUTime) //Need to 'OR' to utilize all cores at start of scheduling
             {
+                bool contSwitch = false;
                 for(int core = 0; core < numCores; core++)
                 {
                     //If proc completed & core hasn't been released
                     if (cores[core].endTime <= CPUTime && !cores[core].free)
+                    {
+                        if(contSwitch)
+                        {
+                            contSwitch = false;
+                            CPUTime -= 2;
+                        }
                         releaseCore(core);
-                    
+                        contSwitch = true;
+
+                    }
                     //If core free, add proc
                     if (cores[core].free && scheduleQueue.Count > 0)
                         addCoreProc(core);
@@ -84,7 +88,6 @@ namespace ProcessScheduler
                 findNextOpenCore();
                 checkBlockedQueue();
             }
-            numCoresUse();
             updateClock();
         }
 
@@ -187,18 +190,6 @@ namespace ProcessScheduler
             else
                 CPUTime++;
         }
-
-        public void numCoresUse()           //TODO: Remove
-        {
-            int num = 0;
-            foreach(Proccessor core in cores)
-            {
-                if (!core.free)
-                    num++;
-            }
-            numCoresUsed = num;
-        }
-
     }
     
 

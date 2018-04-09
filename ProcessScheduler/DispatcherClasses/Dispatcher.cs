@@ -60,6 +60,14 @@ namespace ProcessScheduler
             }
         }
 
+        public void setArrivalQueue(List<Process> processes)
+        {
+            foreach (Process proc in processes)
+                arrivalQueue.Enqueue(proc);
+
+            arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
+        }
+
         public abstract void addNewProcess();
         public abstract void swapProcesses();
         public abstract void checkBlockedQueue();
