@@ -48,7 +48,7 @@ namespace ProcessScheduler
 
 				if (proc.arrivalTime <= CPUTime)    //If proc arrived
 				{
-					scheduleQueue.Enqueue(proc);
+					ShiftQueues(proc);
 					arrivalQueue.Dequeue();
 				}
 				else        //No procs left to arrive
