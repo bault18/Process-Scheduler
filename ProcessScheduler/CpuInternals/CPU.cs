@@ -60,7 +60,7 @@ namespace ProcessScheduler
         /// <summary>
         /// Adds a sheet to an excel doc with all the run's data
         /// </summary>
-        static private void outputRun(ref List<Process> completeProcs, ref Excel.Application excelApp, int run)
+        private void outputRun(ref List<Process> completeProcs, ref Excel.Application excelApp, int run)
         {
 
             Excel._Worksheet workSheet;
@@ -123,6 +123,9 @@ namespace ProcessScheduler
 
             workSheet.Cells[13, "K"] = "Throughput";
             workSheet.Cells[14, "K"] = "=A1000/999";
+
+            workSheet.Cells[16, "K"] = "Num Context Switches";
+            workSheet.Cells[17, "K"] = scheduler.numContextSwitch;
         }
 
         /// <summary>
@@ -135,17 +138,24 @@ namespace ProcessScheduler
             string turnaround = "=AVERAGE(Run1!K2";
             string response = "=AVERAGE(Run1!K5";
             string blocked = "=AVERAGE(Run1!K8";
-            string waittime = "=AVERAGE(Run1!K9";
+            string waittime = "=AVERAGE(Run1!K11";
+            string throughput = "=AVERAGE(Run1!K14";
+            string contextswitch = "=AVERAGE(Run1!K17";
             for (int runNum = 2; runNum < numRuns; runNum++)
             {
                 turnaround += ",Run" + runNum + "!K2";
                 response += ",Run" + runNum + "!K5";
                 blocked += ",Run" + runNum + "!K8";
                 waittime += ",Run" + runNum + "!K11";
+                throughput += ",Run" + runNum + "!K14";
+                contextswitch += ",Run" + runNum + "!K17";
             }
             turnaround += ")";
             response += ")";
             blocked += ")";
+            throughput += ")";
+            contextswitch += ")";
+
 
             workSheet.Cells[1, "A"] = "Avg Turnaround";
             workSheet.Cells[2, "A"] = turnaround;
@@ -158,6 +168,12 @@ namespace ProcessScheduler
 
             workSheet.Cells[10, "A"] = "Avg Wait Time";
             workSheet.Cells[11, "A"] = waittime;
+
+            workSheet.Cells[13, "A"] = "Avg Throughput";
+            workSheet.Cells[14, "A"] = throughput;
+
+            workSheet.Cells[16, "A"] = "Avg Num Context Switches";
+            workSheet.Cells[17, "A"] = contextswitch;
 
             Console.WriteLine(scheduler.Name);
             Console.WriteLine(Directory.GetCurrentDirectory() + "\\" + scheduler.Name);
