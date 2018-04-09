@@ -20,17 +20,12 @@ namespace ProcessScheduler
             scheduleQueue = new Queue<Process>();
         }
 
-        public Roundrobin(List<Process> processes, int quantum)
+        public Roundrobin(int quantum)
         {
             Name = "RoundRobin";
             quantumTime = quantum;
 
             scheduleQueue = new Queue<Process>();
-
-            foreach (Process proc in processes)
-                arrivalQueue.Enqueue(proc);
-
-            arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
         }
 
 
