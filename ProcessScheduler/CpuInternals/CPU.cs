@@ -14,7 +14,7 @@ namespace ProcessScheduler
     class CPU
     {
         private Dispatcher scheduler;
-        private int numRuns = 3;
+        private int numRuns = 2;
         public CPU(Dispatcher schedul)
         {
             scheduler = schedul;
@@ -137,6 +137,8 @@ namespace ProcessScheduler
 
             workSheet.Cells[1, "C"] = scheduler.Name;
 
+            Console.WriteLine(scheduler.Name);
+            Console.WriteLine(Directory.GetCurrentDirectory() + "\\" + scheduler.Name);
             excelApp.ActiveWorkbook.SaveAs(Directory.GetCurrentDirectory() + "\\" + scheduler.Name);
 
 
@@ -146,7 +148,7 @@ namespace ProcessScheduler
         {
             //Create Excel Doc
             var excelApp = new Excel.Application();
-            excelApp.Visible = false;
+            excelApp.Visible = true;
             excelApp.Workbooks.Add();
 
             //BEGIN RUNS

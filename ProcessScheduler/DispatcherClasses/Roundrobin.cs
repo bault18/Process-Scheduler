@@ -14,6 +14,7 @@ namespace ProcessScheduler
 
         public Roundrobin(List<Process> processes)
         {
+            Name = "RoundRobin";
             quantumTime = 5;
 
             scheduleQueue = new Queue<Process>();
