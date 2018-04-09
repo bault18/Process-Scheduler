@@ -190,7 +190,7 @@ namespace ProcessScheduler
             excelApp.Workbooks.Add();
 
             //BEGIN RUNS
-            for (int runNum = 0; runNum < numRuns; runNum++)
+            for (int runNum = 1; runNum < numRuns; runNum++)
             {
                 //Bring in process input files
                 List<Process> processes = getProcesses(dataSet + "\\set" + runNum.ToString() + ".txt");

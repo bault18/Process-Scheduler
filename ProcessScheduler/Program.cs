@@ -56,7 +56,6 @@ namespace ProcessScheduler
         {
 
             string dataset = "\\1_BaseDataSet";
-            string initialFile = "\\set1.txt";
             Dispatcher fcfs = new Fcfs();
             Dispatcher rr = new Roundrobin();
             //Dispatcher mlf = new MultiLevelFeedback();
