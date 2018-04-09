@@ -20,13 +20,13 @@ namespace ProcessScheduler
         #region Constructors
         public Spn()
         {
-            Name = "ShortedProcessNext";
+            Name = "ShortestProcessNext";
             scheduleQueue = new Queue<Process>();
         }
 
         public Spn(double histWeight)
         {
-            Name = "ShortedProcessNext";
+            Name = "ShortestProcessNext";
             scheduleQueue = new Queue<Process>();
             historicWeight = histWeight;
         }
