@@ -57,9 +57,10 @@ namespace ProcessScheduler
 			if (scheduleQueue.Count > 0)
 			{
 				SortScheduleQ();
-				previousServiceTime = currProcess.previousBurstTime > 0 ? currProcess.previousBurstTime : defaultPreviousServiceTime;
+                currProcess = scheduleQueue.Dequeue(); //Fetch process from front of dispatch queue
+                previousServiceTime = currProcess.previousBurstTime > 0 ? currProcess.previousBurstTime : defaultPreviousServiceTime;
 				expectedServiceTime = currProcess.predictedBurst > 0 ? currProcess.predictedBurst : defaultExpectedServiceTime; 
-				currProcess = scheduleQueue.Dequeue(); //Fetch process from front of dispatch queue
+				
 				currProcess.predictedBurst = (historicWeight * previousServiceTime) + (counterWeight * expectedServiceTime);
 				//Set response time
 				if (currProcess.responseTime < 0)
