@@ -12,7 +12,7 @@ namespace ProcessScheduler
 
         private int pid;
         private int ArrivalTime;
-        private List<int> CompletedEvents; //TODO: determine if needs to be public member
+        private List<int> CompletedEvents;
         private LinkedList<int> RemainingEvents;
         public int blockExitTime; //Time process exits block queue
         public int priority; //Linux style priority. The lower the value, the higher the priority

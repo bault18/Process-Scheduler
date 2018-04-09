@@ -14,7 +14,7 @@ namespace ProcessScheduler
     class CPU
     {
         private Dispatcher scheduler;
-        private int numRuns = 2;
+        private int numRuns = 4;        //TODO: set to 100
         public CPU(Dispatcher schedul)
         {
             scheduler = schedul;
@@ -87,7 +87,9 @@ namespace ProcessScheduler
             workSheet.Cells[1, "H"] = "Total Scheduling Queue Time";
             workSheet.Cells[1, "I"] = "Turnaround Time";
 
-            double subToResponse = 0;
+            double responseTime = 0;
+            double blockedTime = 0;
+            double waitTime = 0;
             for (int i = 0; i < completeProcs.Count(); i++)
             {
                 workSheet.Cells[i + 2, "A"] = completeProcs[i].PID;
@@ -102,14 +104,27 @@ namespace ProcessScheduler
 
 
                 //Stuff for other data analysis
-                subToResponse += completeProcs[i].responseTime - completeProcs[i].arrivalTime;
+                responseTime += completeProcs[i].responseTime - completeProcs[i].arrivalTime;
+                blockedTime += completeProcs[i].blockedTime;
+                waitTime += (completeProcs[i].completedTime - completeProcs[i].arrivalTime) - completeProcs[i].totalProcessingTime;
             }
 
             workSheet.Cells[1, "K"] = "Avg Turnaround";
             workSheet.Cells[2, "K"] = "=AVERAGE(I2:I1001)";
 
             workSheet.Cells[4, "K"] = "Avg Response time";
-            workSheet.Cells[5, "K"] = subToResponse / completeProcs.Count();
+            workSheet.Cells[5, "K"] = responseTime / completeProcs.Count();
+
+            workSheet.Cells[7, "K"] = "Avg Blocking Time";
+            workSheet.Cells[8, "K"] = blockedTime / completeProcs.Count();
+
+            workSheet.Cells[10, "K"] = "Avg Wait Time";
+            workSheet.Cells[11, "K"] = waitTime;
+
+            workSheet.Cells[13, "K"] = "Throughput";
+            workSheet.Cells[14, "K"] = "=A1000/999";
+
+            workSheet.Cells[10, "Q"] = run;
         }
 
         /// <summary>
@@ -121,21 +136,30 @@ namespace ProcessScheduler
             Excel._Worksheet workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
             string turnaround = "=AVERAGE(Run1!K2";
             string response = "=AVERAGE(Run1!K5";
+            string blocked = "=AVERAGE(Run1!K8";
+            string waittime = "=AVERAGE(Run1!K9";
             for (int runNum = 2; runNum < numRuns; runNum++)
             {
                 turnaround += ",Run" + runNum + "!K2";
                 response += ",Run" + runNum + "!K5";
+                blocked += ",Run" + runNum + "!K8";
+                waittime += ",Run" + runNum + "!K11";
             }
             turnaround += ")";
             response += ")";
+            blocked += ")";
 
             workSheet.Cells[1, "A"] = "Avg Turnaround";
             workSheet.Cells[2, "A"] = turnaround;
 
-            workSheet.Cells[3, "A"] = "Avg Response Time";
-            workSheet.Cells[4, "A"] = response;
+            workSheet.Cells[4, "A"] = "Avg Response Time";
+            workSheet.Cells[5, "A"] = response;
 
-            workSheet.Cells[1, "C"] = scheduler.Name;
+            workSheet.Cells[7, "A"] = "Avg Blocked Time";
+            workSheet.Cells[8, "A"] = blocked;
+
+            workSheet.Cells[10, "A"] = "Avg Wait Time";
+            workSheet.Cells[11, "A"] = waittime;
 
             Console.WriteLine(scheduler.Name);
             Console.WriteLine(Directory.GetCurrentDirectory() + "\\" + scheduler.Name);
@@ -157,8 +181,9 @@ namespace ProcessScheduler
                 //Bring in process input files
                 List<Process> processes = getProcesses(dataSet + "\\set" + runNum.ToString() + ".txt");
 
+                scheduler.setArrivalQueue(processes);
                 scheduler.run();
-                Console.WriteLine("Run" + runNum.ToString() + " complete");
+                Console.WriteLine("Run" + runNum.ToString()  + " of " + scheduler.Name + " complete");
 
 
                 //OUTPUT RESULTS TO EXCEL DOC

@@ -13,15 +13,10 @@ namespace ProcessScheduler
         #endregion
 
         #region Constructors
-        public Fcfs(List<Process> processes)
+        public Fcfs()
         {
             Name = "FirstComeFirstServed";
             scheduleQueue = new Queue<Process>();
-
-            foreach (Process proc in processes)
-                arrivalQueue.Enqueue(proc);
-
-            arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
         }
         #endregion
 
