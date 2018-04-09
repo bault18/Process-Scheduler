@@ -61,12 +61,18 @@ namespace ProcessScheduler
         public static void highTimeQuanta()
         {
             string dataset = "\\1_BaseDataSet";
-            Dispatcher rr = new Roundrobin(2);
-            Dispatcher spn = new Spn();
+            Dispatcher fcfs = new Fcfs();
+            Dispatcher rr = new Roundrobin();
+            //Dispatcher mlf = new MultiLevelFeedback();
+            Dispatcher ls = new LoadSharing();
+            //Dispatcher spn = new Spn();
 
             CPU RR = new CPU(rr);
-            CPU SPN = new CPU(spn);
+            //CPU MLF = new CPU(mlf);
+            CPU LS = new CPU(ls);
+            //CPU SPN = new CPU(spn);
 
+            FCFS.runAlg(dataset);
 
             List<Thread> threads = new List<Thread>();
 
