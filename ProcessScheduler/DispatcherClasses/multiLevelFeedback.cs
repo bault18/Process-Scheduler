@@ -10,7 +10,6 @@ namespace ProcessScheduler
 	class MultiLevelFeedback : Dispatcher
 	{
         #region Member Variables
-        Queue<Process> scheduleQueue;
 		Queue<Process> highPriorityQ;
 		Queue<Process> mediumPriorityQ;
 		Queue<Process> lowPriorityQ;
@@ -20,47 +19,29 @@ namespace ProcessScheduler
 		#endregion
 
 		#region Constructors
-		public MultiLevelFeedback(List<Process> processes)
+		public MultiLevelFeedback()
 		{
             Name = "MultiLevelFeedback";
-            scheduleQueue = new Queue<Process>();
-
-			foreach (Process proc in processes)
-			{
-				proc.priority = 0;              //Set the initial priority of each process to high
-				arrivalQueue.Enqueue(proc);
-			}
-			arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
             highPriorityQ = new Queue<Process>();
             mediumPriorityQ = new Queue<Process>();
             lowPriorityQ = new Queue<Process>();
             catchQ = new SimpleFcfs();
-
         }
 
         //Set the quanta array via constructor
         //THE newQuanta PARAMETER MUST HAVE LENGTH 4
-        public MultiLevelFeedback(List<Process> processes, int[] newQuanta)
+        public MultiLevelFeedback(int hiPriQuantum, int medPriQuantum, int lowPriQuantum, int catchQuantum)
         {
             Name = "MultiLevelFeedback";
-            if (newQuanta.Length != 4)
-            {
-                throw new ArgumentOutOfRangeException("newQuanta must be length 4");
-            }
-            quanta = newQuanta;
-            scheduleQueue = new Queue<Process>();
-
-            foreach (Process proc in processes)
-            {
-                proc.priority = 0;              //Set the initial priority of each process to high
-                arrivalQueue.Enqueue(proc);
-            }
-            arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
+            //Set the quanta
+            quanta[0] = hiPriQuantum;
+            quanta[1] = medPriQuantum;
+            quanta[2] = lowPriQuantum;
+            quanta[3] = catchQuantum;
             highPriorityQ = new Queue<Process>();
             mediumPriorityQ = new Queue<Process>();
             lowPriorityQ = new Queue<Process>();
             catchQ = new SimpleFcfs();
-
         }
         #endregion
 

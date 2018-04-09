@@ -18,15 +18,17 @@ namespace ProcessScheduler
         #endregion
 
         #region Constructors
-        public Spn(List<Process> processes)
+        public Spn()
         {
             Name = "ShortedProcessNext";
             scheduleQueue = new Queue<Process>();
+        }
 
-            foreach (Process proc in processes)
-                arrivalQueue.Enqueue(proc);
-
-            arrivalQueue = new Queue<Process>(arrivalQueue.OrderBy(p => p.arrivalTime));
+        public Spn(double histWeight)
+        {
+            Name = "ShortedProcessNext";
+            scheduleQueue = new Queue<Process>();
+            historicWeight = histWeight;
         }
         #endregion
 
