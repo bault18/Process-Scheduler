@@ -84,15 +84,21 @@ namespace ProcessScheduler
             Dispatcher fcfs = new Fcfs();
             Dispatcher rr = new Roundrobin();
             Dispatcher spn = new Spn();
+            Dispatcher mlf = new MultiLevelFeedback();
+            Dispatcher ls = new LoadSharing();
 
             CPU FCFS = new CPU(fcfs);
             CPU RR = new CPU(rr);
             CPU SPN = new CPU(spn);
-
+            CPU MLF = new CPU(mlf);
+            CPU LS = new CPU(ls);
 
             FCFS.runAlg(dataset);
             RR.runAlg(dataset);
             SPN.runAlg(dataset);
+            MLF.runAlg(dataset);
+            LS.runAlg(dataset);
+
             //TODO: Uncomment
             /*
             collectData("\\2_LowIOProbability");
@@ -101,10 +107,6 @@ namespace ProcessScheduler
             collectData("\\4_ShortJobs");
             collectData("\\5_LongJobs");
             */
-
-
-
-
         }
     }
 
